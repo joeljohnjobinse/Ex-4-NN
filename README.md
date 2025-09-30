@@ -114,12 +114,78 @@ Normalize our dataset.
 8. Finally, call the functions confusion_matrix(), and the classification_report() in order to evaluate the performance of our classifier.
 
 <H3>Program:</H3> 
+```
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+```
 
-Insert your code here
+```
+df = pd.read_csv('data.csv')
+print(df.head())
+```
+
+```
+df = df.drop(columns=["id", "Unnamed: 32"])
+a = df.drop(columns=["diagnosis"])
+b = df["diagnosis"]
+b = b.fillna(b.mode()[0])
+```
+
+```
+training_a, testing_a, training_b, testing_b = train_test_split(
+    a, b, test_size=0.25, random_state=42, stratify=b
+)
+myscaler = StandardScaler()
+myscaler.fit(training_a)
+training_a = myscaler.transform(training_a)
+testing_a = myscaler.transform(testing_a)
+```
+
+```
+m1 = MLPClassifier(
+    hidden_layer_sizes=(12, 13, 14),
+    activation='relu',
+    solver='adam',
+    max_iter=2500,
+    random_state=42
+)
+m1.fit(training_a, training_b)
+```
+
+```
+predicted_values = m1.predict(testing_a)
+print(predicted_values)
+```
+
+```
+print("Confusion Matrix:")
+print(confusion_matrix(testing_b, predicted_values), "\n")
+```
+
+```
+print("Classification Report:")
+print(classification_report(testing_b, predicted_values))
+```
 
 <H3>Output:</H3>
+<H4> df.head() </H4>
+<img width="733" height="623" alt="image" src="https://github.com/user-attachments/assets/217a369f-ad4e-4787-903b-b9901285367b" />
 
-Show your results here
+<H4> MLPClassifier </H4>
+<img width="743" height="78" alt="image" src="https://github.com/user-attachments/assets/02da28ce-6134-48ac-b9a9-fc0a69376745" />
+
+<H4> Predicted Values </H4>
+<img width="662" height="152" alt="image" src="https://github.com/user-attachments/assets/c9a88628-5140-4163-b002-566aed21d929" />
+
+<H4> Confusion Matrix </H4>
+<img width="226" height="81" alt="image" src="https://github.com/user-attachments/assets/f71395ff-78f5-4d66-8d9e-f0e4edc40a10" />
+
+<H4> Classification Report </H4>
+<img width="536" height="180" alt="image" src="https://github.com/user-attachments/assets/d29f14cc-d78a-48cb-96e4-ea17c4d4d808" />
 
 <H3>Result:</H3>
 Thus, MLP is implemented for multi-classification using python.
