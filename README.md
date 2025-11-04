@@ -1,11 +1,12 @@
-<H3>ENTER YOUR NAME: JOEL JOHN JOBINSE</H3>
-<H3>ENTER YOUR REGISTER NO.: 2122223240062</H3>
+
+<H3>NAME: JOEL JOHN JOBINSE</H3>
+<H3>REGISTER NO: 212223240062</H3>
 <H3>EX. NO.4</H3>
-<H3>DATE: 30/09/2025</H3>
+<H3>DATE:30.09.2025</H3>
 <H1 ALIGN =CENTER>Implementation of MLP with Backpropagation for Multiclassification</H1>
 <H3>Aim:</H3>
 To implement a Multilayer Perceptron for Multi classification
-<H3>Theory</H3>
+<H3>Theory:</H3>
 
 A multilayer perceptron (MLP) is a feedforward artificial neural network that generates a set of outputs from a set of inputs. An MLP is characterized by several layers of input nodes connected as a directed graph between the input and output layers. MLP uses back propagation for training the network. MLP is a deep learning method.
 A multilayer perceptron is a neural network connecting multiple layers in a directed graph, which means that the signal path through the nodes only goes one way. Each node, apart from the input nodes, has a nonlinear activation function. An MLP uses backpropagation as a supervised learning technique.
@@ -115,78 +116,52 @@ Normalize our dataset.
 
 <H3>Program:</H3> 
 
+
 ```
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-```
+from sklearn.metrics import confusion_matrix, classification_report
 
-```
-df = pd.read_csv('data.csv')
-print(df.head())
-```
-
-```
-df = df.drop(columns=["id", "Unnamed: 32"])
-a = df.drop(columns=["diagnosis"])
-b = df["diagnosis"]
-b = b.fillna(b.mode()[0])
-```
-
-```
-training_a, testing_a, training_b, testing_b = train_test_split(
-    a, b, test_size=0.25, random_state=42, stratify=b
-)
-myscaler = StandardScaler()
-myscaler.fit(training_a)
-training_a = myscaler.transform(training_a)
-testing_a = myscaler.transform(testing_a)
-```
-
-```
-m1 = MLPClassifier(
-    hidden_layer_sizes=(12, 13, 14),
-    activation='relu',
-    solver='adam',
-    max_iter=2500,
-    random_state=42
-)
-m1.fit(training_a, training_b)
-```
-
-```
-predicted_values = m1.predict(testing_a)
+df1=pd.read_csv('heart.csv')
+df1
+a=df1.iloc[:,0:13]
+b=df1.iloc[:,13:14]
+a.head()
+b.tail()
+a_train,a_test,b_train,b_test=train_test_split(a,b,test_size=0.25,random_state=42)
+scaler=StandardScaler()
+scaler.fit(a_train)
+a_train = scaler.transform(a_train)
+a_test = scaler.transform(a_test)
+m1 = MLPClassifier(hidden_layer_sizes=(12, 13, 14), activation='relu', solver='adam', max_iter=2500, random_state=42)
+m1.fit(a_train, b_train.values.ravel())
+predicted_values = m1.predict(a_test)
+print("\nPredicted Values:")
 print(predicted_values)
-```
+print("\nConfusion Matrix:")
+print(confusion_matrix(b_test, predicted_values))
+print("\nClassification Report:")
+print(classification_report(b_test, predicted_values))
 
 ```
-print("Confusion Matrix:")
-print(confusion_matrix(testing_b, predicted_values), "\n")
-```
 
-```
-print("Classification Report:")
-print(classification_report(testing_b, predicted_values))
-```
 
 <H3>Output:</H3>
-<H4> df.head() </H4>
-<img width="733" height="623" alt="image" src="https://github.com/user-attachments/assets/217a369f-ad4e-4787-903b-b9901285367b" />
 
-<H4> MLPClassifier </H4>
-<img width="743" height="78" alt="image" src="https://github.com/user-attachments/assets/02da28ce-6134-48ac-b9a9-fc0a69376745" />
+#### Predicted Values
 
-<H4> Predicted Values </H4>
-<img width="662" height="152" alt="image" src="https://github.com/user-attachments/assets/c9a88628-5140-4163-b002-566aed21d929" />
+<img width="993" height="262" alt="Screenshot 2025-10-04 193601" src="https://github.com/user-attachments/assets/75f0dbfb-118d-4b5d-89f1-aff3b8511704" />
 
-<H4> Confusion Matrix </H4>
-<img width="226" height="81" alt="image" src="https://github.com/user-attachments/assets/f71395ff-78f5-4d66-8d9e-f0e4edc40a10" />
+#### Confusion Matrix
+<img width="283" height="144" alt="Screenshot 2025-10-04 193614" src="https://github.com/user-attachments/assets/62f2337a-2d4e-43ef-80c8-b1ac6bb0974b" />
 
-<H4> Classification Report </H4>
-<img width="536" height="180" alt="image" src="https://github.com/user-attachments/assets/d29f14cc-d78a-48cb-96e4-ea17c4d4d808" />
+#### Classification Report
+
+<img width="763" height="320" alt="Screenshot 2025-10-04 193623" src="https://github.com/user-attachments/assets/cecce9bc-a5cb-4cc2-8011-5b443ee087c8" />
+
 
 <H3>Result:</H3>
+
 Thus, MLP is implemented for multi-classification using python.
