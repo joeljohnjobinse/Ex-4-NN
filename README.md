@@ -1,12 +1,13 @@
-
 <H3>NAME: JOEL JOHN JOBINSE</H3>
 <H3>REGISTER NO: 212223240062</H3>
 <H3>EX. NO.4</H3>
 <H3>DATE:30.09.2025</H3>
-<H1 ALIGN =CENTER>Implementation of MLP with Backpropagation for Multiclassification</H1>
-<H3>Aim:</H3>
+# EX-4 : IMPLEMENTATION OF MLP WITH BACKPROPAGATION FOR MULTICLASSIFICATION
+
+## AIM :
 To implement a Multilayer Perceptron for Multi classification
-<H3>Theory:</H3>
+
+## THEORY :
 
 A multilayer perceptron (MLP) is a feedforward artificial neural network that generates a set of outputs from a set of inputs. An MLP is characterized by several layers of input nodes connected as a directed graph between the input and output layers. MLP uses back propagation for training the network. MLP is a deep learning method.
 A multilayer perceptron is a neural network connecting multiple layers in a directed graph, which means that the signal path through the nodes only goes one way. Each node, apart from the input nodes, has a nonlinear activation function. An MLP uses backpropagation as a supervised learning technique.
@@ -95,7 +96,7 @@ In the backward pass,
 
 ![image](https://user-images.githubusercontent.com/112920679/198814362-05a251fd-fceb-43cd-867b-75e6339d870a.png)
 
-<H3>Algorithm:</H3>
+## ALGORITHM :
 
 1. Import the necessary libraries of python.
 
@@ -114,54 +115,56 @@ Normalize our dataset.
 
 8. Finally, call the functions confusion_matrix(), and the classification_report() in order to evaluate the performance of our classifier.
 
-<H3>Program:</H3> 
+## PROGRAM :
 
 
 ```
 import pandas as pd
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
-df1=pd.read_csv('heart.csv')
-df1
-a=df1.iloc[:,0:13]
-b=df1.iloc[:,13:14]
-a.head()
-b.tail()
-a_train,a_test,b_train,b_test=train_test_split(a,b,test_size=0.25,random_state=42)
-scaler=StandardScaler()
-scaler.fit(a_train)
-a_train = scaler.transform(a_train)
-a_test = scaler.transform(a_test)
-m1 = MLPClassifier(hidden_layer_sizes=(12, 13, 14), activation='relu', solver='adam', max_iter=2500, random_state=42)
-m1.fit(a_train, b_train.values.ravel())
-predicted_values = m1.predict(a_test)
-print("\nPredicted Values:")
-print(predicted_values)
-print("\nConfusion Matrix:")
-print(confusion_matrix(b_test, predicted_values))
-print("\nClassification Report:")
-print(classification_report(b_test, predicted_values))
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data"
 
+names = ["Class", "Alcohol", "Malic_acid", "Ash", "Magnesium"]
+
+winedata = pd.read_csv(url, names=names, usecols=[0, 1, 2, 3, 5])
+
+print(winedata.head())
+
+x = winedata.iloc[:, 1:]   # features
+y = winedata["Class"]      # labels
+
+# Encode labels
+le = preprocessing.LabelEncoder()
+y_encoded = le.fit_transform(y)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y_encoded, test_size=0.25, random_state=42)
+
+scaler = StandardScaler()
+scaler.fit(x_train)
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+mlp = MLPClassifier(hidden_layer_sizes=(10,10,10), max_iter=1000, random_state=42)
+mlp.fit(x_train, y_train)
+
+predictions = mlp.predict(x_test)
+predicted_classes = le.inverse_transform(predictions)
+
+# Confusion matrix
+print(confusion_matrix(y_test, predictions))
+
+# Classification report with proper class labels
+print(classification_report(y_test, predictions, target_names=[f"Wine-Class-{c}" for c in le.classes_]))
 ```
+## OUTPUT :
+
+<img width="927" height="403" alt="image" src="https://github.com/user-attachments/assets/164f6720-d241-4a9a-bdc7-72761d8fc77d" />
 
 
-<H3>Output:</H3>
-
-#### Predicted Values
-
-<img width="993" height="262" alt="Screenshot 2025-10-04 193601" src="https://github.com/user-attachments/assets/75f0dbfb-118d-4b5d-89f1-aff3b8511704" />
-
-#### Confusion Matrix
-<img width="283" height="144" alt="Screenshot 2025-10-04 193614" src="https://github.com/user-attachments/assets/62f2337a-2d4e-43ef-80c8-b1ac6bb0974b" />
-
-#### Classification Report
-
-<img width="763" height="320" alt="Screenshot 2025-10-04 193623" src="https://github.com/user-attachments/assets/cecce9bc-a5cb-4cc2-8011-5b443ee087c8" />
-
-
-<H3>Result:</H3>
-
+## RESULT :
 Thus, MLP is implemented for multi-classification using python.
+
